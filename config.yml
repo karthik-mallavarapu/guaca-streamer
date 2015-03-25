@@ -1,0 +1,7 @@
+guac_host: '192.168.56.98'
+guac_port: 4822
+remote_host: '192.168.56.98'
+remote_port: 5900
+protocol: 'vnc'
+username: 'karthik'
+password: 'karthik'
