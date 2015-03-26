@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'mini_magick'
-gem 'eventmachine'
+gem 'celluloid-io'
 group :test, :development do
   gem 'rspec'
   gem 'pry'
