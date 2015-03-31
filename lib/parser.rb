@@ -1,17 +1,44 @@
 module Parser
   
+  # Split instructions by ; and handle each instruction based on the opcode. Check for carry over instruction.
   def parse_instructions(data)
-    print data
+    puts data
+    instructions = data.split(";")
+    instructions.each do |inst|
+      opcode, *args = inst.split(",")
+      len, opcode_val = opcode.split(".")
+      send("#{opcode_val}_instr".to_sym, args)
+    end
   end
 
-  def select_instr
-    "6.select,3.#{config["protocol"]};" 
+  def error_instr(args)
+    puts "Error instruction received: #{args}"
   end
 
-  def connect_instr
-    ip_addr = config.remote_host
-    port = config.remote_port
-    "4.size,4.1024,3.768,2.96;5.audio,9.audio/ogg;5.video;7.connect,#{ip_addr.size}.#{ip_addr},#{port.size}.#{port},0.,0.,0.;"
+  def args_instr(args)
+    send_to_server(client_size_instr+client_audio_instr+client_video_instr+client_connect_instr(args))
+  end 
+
+  def ready_instr(args)
+    puts "Ready instruction received: #{args}"
+  end
+
+  def sync_instr(args)
+    t = Time.now.to_i
+    send_to_server("4.sync,#{t.size}.t;")
+  end
+
+  def png_instr(args)
+    #puts args 
+  end
+  
+  def method_missing(sym, *args, &block)
+    puts "Instr not yet implemented. Printing it out"
+    puts sym
+  end
+
+  def respond_to?(sym, include_private=false)
+    true
   end
 
 end

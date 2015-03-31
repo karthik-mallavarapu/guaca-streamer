@@ -3,9 +3,6 @@ GEM
   specs:
     celluloid (0.16.0)
       timers (~> 4.0.0)
-    celluloid-io (0.16.2)
-      celluloid (>= 0.16.0)
-      nio4r (>= 1.1.0)
     coderay (1.1.0)
     diff-lcs (1.2.5)
     ffi (1.9.8)
@@ -14,7 +11,6 @@ GEM
       spoon (>= 0.0.1)
     method_source (0.8.2)
     mini_magick (4.2.0)
-    nio4r (1.1.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -42,7 +38,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  celluloid-io
+  celluloid
   interactive_editor
   mini_magick
   pry
