@@ -15,8 +15,11 @@ module Parser
       return []
     end
     instructions = data.split(";")
+    unless self.partial_instr.empty?
+      instructions[0] = self.partial_instr + instructions[0]
+      self.partial_instr = ''
+    end
     unless data.end_with? ";"
-      instructions[0] += self.partial_instr
       self.partial_instr = instructions.pop
     end
     return instructions

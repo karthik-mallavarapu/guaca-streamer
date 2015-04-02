@@ -10,7 +10,7 @@ class Client
   include GuacHandler
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
-  attr_reader :config, :socket, :partial_instr, :logger
+  attr_accessor :config, :socket, :partial_instr, :logger
   INSTR = {
     :args => "ARGS"
   }
