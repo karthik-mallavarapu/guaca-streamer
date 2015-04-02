@@ -9,21 +9,23 @@ module Parser
   end
   
   def process_partial_instr(data)
+    #log_entry(data)
+    unless data.include? ";"
+      self.partial_instr += data
+      return []
+    end
     instructions = data.split(";")
-    unless partial_instr.empty?
-      carryover_instr = partial_instr + instructions.shift
-      instructions[0] = partial_instr + instructions[0]
-      partial_instr = ''
-    end
     unless data.end_with? ";"
-      partial_instr = instructions.pop
+      instructions[0] += self.partial_instr
+      self.partial_instr = instructions.pop
     end
-    instructions
+    return instructions
   end
 
   def handle_instruction(inst)
     opcode, *args = inst.split(",")
     len, opcode_val = opcode.split(".")
+    puts "Received #{opcode_val}"
     send("#{opcode_val}_instr".to_sym, args)
   end
 

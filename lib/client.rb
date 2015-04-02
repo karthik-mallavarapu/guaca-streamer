@@ -10,7 +10,7 @@ class Client
   include GuacHandler
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
-  attr_reader :config, :socket, :partial_instr
+  attr_reader :config, :socket, :partial_instr, :logger
   INSTR = {
     :args => "ARGS"
   }
@@ -18,12 +18,17 @@ class Client
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
     @partial_instr = ''
+    @logger = File.open("guac.log", 'a')
     @socket = Socket.tcp(config["guac_host"], config["guac_port"].to_i)
+  end
+
+  def log_entry(data)
+    logger.puts(data)
   end
   
   def client_handshake
     send_to_server(client_select_instr)
-    data = socket.readpartial(4096)
+    data = socket.readpartial(1024)
     parse_instructions(data)
   end
   
