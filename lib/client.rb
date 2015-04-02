@@ -1,23 +1,23 @@
 require 'thread'
 require 'socket'
 require 'yaml'
-require 'celluloid'
 require_relative 'parser'
+require_relative 'guac_handler'
 
 class Client 
 
-  include Celluloid
   include Parser
+  include GuacHandler
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
-  attr_reader :config, :socket, :carryover_instr
+  attr_reader :config, :socket, :partial_instr
   INSTR = {
     :args => "ARGS"
   }
 
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
-    @carryover_instr = ''
+    @partial_instr = ''
     @socket = Socket.tcp(config["guac_host"], config["guac_port"].to_i)
   end
   
@@ -28,6 +28,7 @@ class Client
   end
   
   def send_to_server(data)
+    puts "sending "+data
     socket.print(data)
     socket.flush
   end

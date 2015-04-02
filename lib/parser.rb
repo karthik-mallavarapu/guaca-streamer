@@ -2,43 +2,29 @@ module Parser
   
   # Split instructions by ; and handle each instruction based on the opcode. Check for carry over instruction.
   def parse_instructions(data)
-    puts data
-    instructions = data.split(";")
+    instructions = process_partial_instr(data)
     instructions.each do |inst|
-      opcode, *args = inst.split(",")
-      len, opcode_val = opcode.split(".")
-      send("#{opcode_val}_instr".to_sym, args)
+      handle_instruction(inst)
     end
   end
-
-  def error_instr(args)
-    puts "Error instruction received: #{args}"
-  end
-
-  def args_instr(args)
-    send_to_server(client_size_instr+client_audio_instr+client_video_instr+client_connect_instr(args))
-  end 
-
-  def ready_instr(args)
-    puts "Ready instruction received: #{args}"
-  end
-
-  def sync_instr(args)
-    t = Time.now.to_i
-    send_to_server("4.sync,#{t.size}.t;")
-  end
-
-  def png_instr(args)
-    #puts args 
-  end
   
-  def method_missing(sym, *args, &block)
-    puts "Instr not yet implemented. Printing it out"
-    puts sym
+  def process_partial_instr(data)
+    instructions = data.split(";")
+    unless partial_instr.empty?
+      carryover_instr = partial_instr + instructions.shift
+      instructions[0] = partial_instr + instructions[0]
+      partial_instr = ''
+    end
+    unless data.end_with? ";"
+      partial_instr = instructions.pop
+    end
+    instructions
   end
 
-  def respond_to?(sym, include_private=false)
-    true
+  def handle_instruction(inst)
+    opcode, *args = inst.split(",")
+    len, opcode_val = opcode.split(".")
+    send("#{opcode_val}_instr".to_sym, args)
   end
 
 end
