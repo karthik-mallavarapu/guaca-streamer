@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gem 'mini_magick'
+gem 'rmagick'
 gem 'celluloid'
 group :test, :development do
   gem 'rspec'

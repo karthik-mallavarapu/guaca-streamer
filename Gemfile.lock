@@ -10,11 +10,11 @@ GEM
     interactive_editor (0.0.10)
       spoon (>= 0.0.1)
     method_source (0.8.2)
-    mini_magick (4.2.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    rmagick (2.14.0)
     rspec (3.2.0)
       rspec-core (~> 3.2.0)
       rspec-expectations (~> 3.2.0)
@@ -40,6 +40,6 @@ PLATFORMS
 DEPENDENCIES
   celluloid
   interactive_editor
-  mini_magick
   pry
+  rmagick
   rspec
