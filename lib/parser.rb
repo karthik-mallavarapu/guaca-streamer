@@ -7,20 +7,17 @@ module Parser
       handle_instruction(inst)
     end
   end
-  
+    
   def process_partial_instr(data)
-    #log_entry(data)
     unless data.include? ";"
       self.partial_instr += data
       return []
     end
     instructions = data.split(";")
-    unless self.partial_instr.empty?
-      instructions[0] = self.partial_instr + instructions[0]
-      self.partial_instr = ''
-    end
+    instructions[0] = self.partial_instr + instructions[0]
+    self.partial_instr = ''
     unless data.end_with? ";"
-      self.partial_instr = instructions.pop
+      self.partial_instr += instructions.pop
     end
     return instructions
   end
@@ -28,7 +25,7 @@ module Parser
   def handle_instruction(inst)
     opcode, *args = inst.split(",")
     len, opcode_val = opcode.split(".")
-    puts "Received #{opcode_val}"
+    puts opcode
     send("#{opcode_val}_instr".to_sym, args)
   end
 

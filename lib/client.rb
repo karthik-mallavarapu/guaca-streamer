@@ -1,16 +1,21 @@
 require 'thread'
 require 'socket'
 require 'yaml'
+require 'securerandom'
+require 'rmagick'
 require_relative 'parser'
 require_relative 'guac_handler'
+require_relative 'image_processor'
 
 class Client 
 
   include Parser
   include GuacHandler
+  include ImageProcessor
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
-  attr_accessor :config, :socket, :partial_instr, :logger
+  attr_reader :config, :socket, :logger
+  attr_accessor :partial_instr
   INSTR = {
     :args => "ARGS"
   }
@@ -26,6 +31,14 @@ class Client
     logger.puts(data)
   end
   
+  def connect_to_server
+    client_handshake
+    socket.while_reading do |data|
+      parse_instructions(data)
+    end
+    socket.close
+  end
+
   def client_handshake
     send_to_server(client_select_instr)
     data = socket.readpartial(1024)
@@ -33,7 +46,6 @@ class Client
   end
   
   def send_to_server(data)
-    puts "sending "+data
     socket.print(data)
     socket.flush
   end
@@ -50,7 +62,7 @@ class Client
   end
 
   def client_size_instr
-    "4.size,1.0,4.1024,3.768;"
+    "4.size,4.1024,3.768,2.96;"
   end
 
   def client_audio_instr
@@ -61,13 +73,6 @@ class Client
     "5.video;"
   end
 
-  def connect_to_server
-    client_handshake
-    socket.while_reading do |data|
-      parse_instructions(data)
-    end
-    socket.close
-  end
 end
 class IO
   def while_reading(data = nil)
