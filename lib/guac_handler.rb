@@ -5,7 +5,6 @@ module GuacHandler
   end
 
   def args_instr(args)
-    puts "#{args} args_instr"
     send_to_server(client_size_instr+client_audio_instr+client_video_instr+client_connect_instr(args))
   end 
 
@@ -18,12 +17,13 @@ module GuacHandler
   end
 
   def sync_instr(args)
-    t = Time.now.to_i
-    send_to_server("4.sync,#{t.to_s.size}.#{t};")
+    _, server_timestamp = args.join.split(".")
+    client_timestamp = server_timestamp.to_i - 100
+    send_to_server("4.sync,#{client_timestamp.to_s.size}.#{client_timestamp};")
   end
 
   def png_instr(args)
-    puts "Png instruction received"
+    write_img_file(args[4].split(".").last) 
   end
 
   def name_instr(args)
@@ -41,9 +41,7 @@ module GuacHandler
   end
 
   def size_instr(args)
-    puts "Layer: #{args[0]}"
-    puts "Width: #{args[1]}"
-    puts "Height: #{args[2]}"
+    puts "size instruction received"
   end
   
   def method_missing(sym, *args, &block)
