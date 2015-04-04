@@ -1,5 +1,5 @@
 module ImageProcessor
-  
+
   def write_img_file(data)
     img = Magick::Image.read_inline(data).first
     img.format = "png"

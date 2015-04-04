@@ -15,7 +15,7 @@ class Client
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
   attr_reader :config, :socket, :logger
-  attr_accessor :partial_instr
+  attr_accessor :partial_instr, :desktop
   INSTR = {
     :args => "ARGS"
   }
@@ -25,6 +25,8 @@ class Client
     @partial_instr = ''
     @logger = File.open("guac.log", 'a')
     @socket = Socket.tcp(config["guac_host"], config["guac_port"].to_i)
+    # Hardcoding resolution..fix it
+    @desktop = Magick::Image.new(1024, 768)
   end
 
   def log_entry(data)

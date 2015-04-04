@@ -5,7 +5,8 @@ module GuacHandler
   end
 
   def args_instr(args)
-    send_to_server(client_size_instr+client_audio_instr+client_video_instr+client_connect_instr(args))
+    send_to_server(client_size_instr + client_audio_instr + client_video_instr 
+                   + client_connect_instr(args))
   end 
 
   def ready_instr(args)
