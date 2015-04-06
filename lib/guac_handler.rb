@@ -6,7 +6,6 @@ module GuacHandler
 
   def args_instr(args)
     send_to_server(client_size_instr + client_audio_instr + client_video_instr +  client_connect_instr(args))
-    _, x_offset = args[2].split(".")
   end 
 
   def ready_instr(args)
@@ -48,6 +47,14 @@ module GuacHandler
 
   def size_instr(args)
     puts "size instruction received"
+  end
+
+  def copy_instr(args)
+    _, mask = args[5].split(".")
+    _, layer = args[6].split(".")
+    _, x_offset = args[7].split(".")
+    _, y_offset = args[8].split(".")
+    composite_op(mask, layer, x_offset, y_offset)
   end
   
   def method_missing(sym, *args, &block)

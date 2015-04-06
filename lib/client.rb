@@ -15,7 +15,7 @@ class Client
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
   attr_reader :config, :socket, :logger
-  attr_accessor :partial_instr, :desktop
+  attr_accessor :partial_instr, :desktop, :png_channel
 
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
@@ -23,7 +23,7 @@ class Client
     @logger = File.open("guac.log", 'a')
     @socket = Socket.tcp(config["guac_host"], config["guac_port"].to_i)
     # Hardcoding resolution..fix it
-    @desktop = Magick::Image.new(1024, 768)
+    @desktop = Magick::Image.new(800, 600)
     @desktop.format = "png"
   end
 
@@ -62,7 +62,7 @@ class Client
   end
 
   def client_size_instr
-    "4.size,4.1024,3.768,2.96;"
+    "4.size,3.800,3.600,2.96;"
   end
 
   def client_audio_instr
