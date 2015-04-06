@@ -5,8 +5,8 @@ module GuacHandler
   end
 
   def args_instr(args)
-    send_to_server(client_size_instr + client_audio_instr + client_video_instr 
-                   + client_connect_instr(args))
+    send_to_server(client_size_instr + client_audio_instr + client_video_instr +  client_connect_instr(args))
+    _, x_offset = args[2].split(".")
   end 
 
   def ready_instr(args)
@@ -24,7 +24,12 @@ module GuacHandler
   end
 
   def png_instr(args)
-    write_img_file(args[4].split(".").last) 
+    _, buffer = args[1].split(".")
+    _, data = args[4].split(".")
+    _, x_offset = args[2].split(".")
+    _, y_offset = args[3].split(".")
+    puts "Buffer is #{buffer}"
+    update_buffer(data, x_offset.to_i, y_offset.to_i )  if buffer.to_i >= 0
   end
 
   def name_instr(args)

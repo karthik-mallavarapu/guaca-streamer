@@ -1,6 +1,7 @@
 module Parser
   
-  # Split instructions by ; and handle each instruction based on the opcode. Check for carry over instruction.
+  # Split instructions by ; and handle each instruction based on the opcode. 
+  # Check for carry over instruction.
   def parse_instructions(data)
     instructions = process_partial_instr(data)
     instructions.each do |inst|
@@ -24,7 +25,7 @@ module Parser
 
   def handle_instruction(inst)
     opcode, *args = inst.split(",")
-    len, opcode_val = opcode.split(".")
+    _ , opcode_val = opcode.split(".")
     puts opcode
     send("#{opcode_val}_instr".to_sym, args)
   end

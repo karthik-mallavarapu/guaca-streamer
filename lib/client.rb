@@ -16,9 +16,6 @@ class Client
   # Init image buffer.
   attr_reader :config, :socket, :logger
   attr_accessor :partial_instr, :desktop
-  INSTR = {
-    :args => "ARGS"
-  }
 
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
@@ -27,6 +24,7 @@ class Client
     @socket = Socket.tcp(config["guac_host"], config["guac_port"].to_i)
     # Hardcoding resolution..fix it
     @desktop = Magick::Image.new(1024, 768)
+    @desktop.format = "png"
   end
 
   def log_entry(data)
@@ -59,8 +57,8 @@ class Client
   def client_connect_instr(args)
     ip_addr = config["remote_host"]
     port = config["remote_port"]
-    instr = "7.connect,#{ip_addr.size}.#{ip_addr},#{port.to_s.size}.#{port},4.true,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.;"
-    instr
+    inst = "7.connect,#{ip_addr.size}.#{ip_addr},#{port.to_s.size}.#{port},4.true,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.;"
+    inst
   end
 
   def client_size_instr
