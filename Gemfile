@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 gem 'rmagick'
-gem 'celluloid'
+gem 'agent'
 group :test, :development do
   gem 'rspec'
   gem 'pry'
-  gem 'interactive_editor'
 end
