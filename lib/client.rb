@@ -32,17 +32,38 @@ class Client
   end
   
   def connect_to_server
-    client_handshake
-    socket.while_reading do |data|
-      parse_instructions(data)
+    client = Thread.new do
+      client_handshake
+      socket.while_reading do |data|
+        parse_instructions(data)
+      end
     end
-    socket.close
+    img_writer = Thread.new do 
+      sleep 2
+      loop do
+        write_image_to_file
+      end
+    end
+    client.join
+    img_writer.join
+    loop do
+      Signal.trap(:INT) do
+        puts "Disconnecting client"
+        send_to_server(client_disconnect_instr)
+        socket.close
+        exit
+      end
+    end
   end
 
   def client_handshake
     send_to_server(client_select_instr)
     data = socket.readpartial(1024)
     parse_instructions(data)
+  end
+
+  def client_disconnect_instr
+    "10.disconnect;"
   end
   
   def send_to_server(data)
