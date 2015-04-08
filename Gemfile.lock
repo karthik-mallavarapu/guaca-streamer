@@ -2,9 +2,27 @@ GEM
   remote: https://rubygems.org/
   specs:
     agent (0.11.0)
+    atk (2.2.4)
+      glib2 (= 2.2.4)
+    cairo (1.14.1)
+      pkg-config (>= 1.1.5)
     coderay (1.1.0)
     diff-lcs (1.2.5)
+    gdk_pixbuf2 (2.2.4)
+      glib2 (= 2.2.4)
+    glib2 (2.2.4)
+      pkg-config
+    green_shoes (1.1.374)
+      gtk2
+    gtk2 (2.2.4)
+      atk (= 2.2.4)
+      gdk_pixbuf2 (= 2.2.4)
+      pango (= 2.2.4)
     method_source (0.8.2)
+    pango (2.2.4)
+      cairo (>= 1.14.0)
+      glib2 (= 2.2.4)
+    pkg-config (1.1.6)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -30,6 +48,7 @@ PLATFORMS
 
 DEPENDENCIES
   agent
+  green_shoes
   pry
   rmagick
   rspec

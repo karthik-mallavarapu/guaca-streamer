@@ -45,7 +45,7 @@ class Client
       end
     end
     client.join
-    img_writer.join
+    #img_writer.join
     loop do
       Signal.trap(:INT) do
         puts "Disconnecting client"

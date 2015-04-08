@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'rmagick'
-gem 'agent'
+gem 'celluloid'
 group :test, :development do
   gem 'rspec'
   gem 'pry'
