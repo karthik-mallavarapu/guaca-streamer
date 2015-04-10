@@ -12,8 +12,7 @@ module ImageProcessor
 
   def img_from_buffer(layer, src_x, src_y, src_width, src_height)
     if layer == 0
-      desktop_copy = desktop.dup
-      desktop_copy.crop(src_x, src_y, src_width, src_height)
+      desktop.crop(src_x, src_y, src_width, src_height)
     else
       puts "Buffer does not exist yet"
     end
