@@ -17,6 +17,8 @@ class Client
   attr_reader :config, :socket, :logger
   attr_accessor :partial_instr, :desktop
 
+  READ_CHUNK = 100 * 1024
+
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
     @partial_instr = ''
@@ -32,11 +34,9 @@ class Client
 
   def server_connect
     client_handshake
-    socket.while_reading do |data|
+    loop do
+      data = socket.readpartial(READ_CHUNK)
       parse_instructions(data)
-      Signal.trap(:INT) do
-        return
-      end
     end
   end
 
@@ -83,21 +83,4 @@ class Client
     "5.video;"
   end
 
-end
-class IO
-  def while_reading(data = nil)
-    while buf = readpartial_rescued(1024)
-      data << buf  if data
-      yield buf  if block_given?
-    end
-    data
-  end
- 
-  private
- 
-  def readpartial_rescued(size)
-    readpartial(size)
-    rescue EOFError
-    nil
-  end
 end
