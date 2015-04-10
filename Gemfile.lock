@@ -1,28 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    agent (0.11.0)
-    atk (2.2.4)
-      glib2 (= 2.2.4)
-    cairo (1.14.1)
-      pkg-config (>= 1.1.5)
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     coderay (1.1.0)
     diff-lcs (1.2.5)
-    gdk_pixbuf2 (2.2.4)
-      glib2 (= 2.2.4)
-    glib2 (2.2.4)
-      pkg-config
-    green_shoes (1.1.374)
-      gtk2
-    gtk2 (2.2.4)
-      atk (= 2.2.4)
-      gdk_pixbuf2 (= 2.2.4)
-      pango (= 2.2.4)
+    gosu (0.8.7.2)
+    hitimes (1.2.2)
     method_source (0.8.2)
-    pango (2.2.4)
-      cairo (>= 1.14.0)
-      glib2 (= 2.2.4)
-    pkg-config (1.1.6)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -42,13 +27,15 @@ GEM
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
     slop (3.6.0)
+    timers (4.0.1)
+      hitimes
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  agent
-  green_shoes
+  celluloid
+  gosu
   pry
   rmagick
   rspec

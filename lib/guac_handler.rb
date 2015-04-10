@@ -23,12 +23,12 @@ module GuacHandler
   end
 
   def png_instr(args)
-    _, buffer = args[1].split(".")
+    _, layer = args[1].split(".")
     _, data = args[4].split(".")
     _, x_offset = args[2].split(".")
     _, y_offset = args[3].split(".")
-    puts "Buffer is #{buffer}"
-    update_buffer(data, x_offset.to_i, y_offset.to_i )  if buffer.to_i >= 0
+    #puts "layer is #{layer}"
+    update_buffer(data, x_offset.to_i, y_offset.to_i )  if layer.to_i >= 0
   end
 
   def name_instr(args)
@@ -50,11 +50,8 @@ module GuacHandler
   end
 
   def copy_instr(args)
-    _, mask = args[5].split(".")
-    _, layer = args[6].split(".")
-    _, x_offset = args[7].split(".")
-    _, y_offset = args[8].split(".")
-    composite_op(mask, layer, x_offset, y_offset)
+    parsed_args = args.map { |i| i.split(".").last.to_i }
+    composite_op(parsed_args) 
   end
   
   def method_missing(sym, *args, &block)

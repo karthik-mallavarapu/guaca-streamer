@@ -15,6 +15,7 @@ module Parser
       return []
     end
     instructions = data.split(";")
+    #puts "partial instr is nil" if self.partial_instr.nil?
     instructions[0] = self.partial_instr + instructions[0]
     self.partial_instr = ''
     unless data.end_with? ";"
@@ -26,7 +27,7 @@ module Parser
   def handle_instruction(inst)
     opcode, *args = inst.split(",")
     _ , opcode_val = opcode.split(".")
-    puts opcode
+    #puts opcode
     send("#{opcode_val}_instr".to_sym, args)
   end
 

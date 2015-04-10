@@ -1,8 +1,8 @@
-require 'thread'
 require 'socket'
+require 'thread'
 require 'yaml'
-require 'securerandom'
 require 'rmagick'
+require 'pry'
 require_relative 'parser'
 require_relative 'guac_handler'
 require_relative 'image_processor'
@@ -14,8 +14,8 @@ class Client
   include ImageProcessor
   # Read config.yml file to get guacd server config. 
   # Init image buffer.
-  attr_reader :config, :socket, :logger
-  attr_accessor :partial_instr, :desktop, :png_channel
+  attr_reader :config, :socket, :logger, :img_writer
+  attr_accessor :partial_instr, :desktop, :img_list
 
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
@@ -24,36 +24,27 @@ class Client
     @socket = Socket.tcp(config["guac_host"], config["guac_port"].to_i)
     # Hardcoding resolution..fix it
     @desktop = Magick::Image.new(800, 600)
+    @img_list = Magick::ImageList.new
     @desktop.format = "png"
   end
 
   def log_entry(data)
     logger.puts(data)
   end
-  
-  def connect_to_server
-    client = Thread.new do
-      client_handshake
-      socket.while_reading do |data|
-        parse_instructions(data)
-      end
-    end
-    img_writer = Thread.new do 
-      sleep 2
-      loop do
-        write_image_to_file
-      end
-    end
-    client.join
-    #img_writer.join
-    loop do
+
+  def server_connect
+    client_handshake
+    socket.while_reading do |data|
+      parse_instructions(data)
       Signal.trap(:INT) do
-        puts "Disconnecting client"
-        send_to_server(client_disconnect_instr)
-        socket.close
-        exit
+        return
       end
     end
+  end
+
+  def disconnect
+    send_to_server(client_disconnect_instr)
+    socket.close
   end
 
   def client_handshake
