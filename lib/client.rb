@@ -17,7 +17,7 @@ class Client
   attr_reader :config, :socket, :logger
   attr_accessor :partial_instr, :desktop
 
-  READ_CHUNK = 100 * 1024
+  READ_CHUNK = 200 * 1024
 
   def initialize
     @config = YAML.load_file(File.join(File.dirname(__FILE__), '..', 'config.yml'))
