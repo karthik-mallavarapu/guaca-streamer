@@ -28,7 +28,7 @@ module GuacHandler
     _, x_offset = args[2].split(".")
     _, y_offset = args[3].split(".")
     #puts "layer is #{layer}"
-    update_buffer(data, x_offset.to_i, y_offset.to_i )  if layer.to_i >= 0
+    update_desktop!(data, x_offset.to_i, y_offset.to_i )  if layer.to_i >= 0
   end
 
   def name_instr(args)
@@ -46,16 +46,22 @@ module GuacHandler
   end
 
   def size_instr(args)
-    puts "size instruction received"
+    _, layer = args[0].split(".")
+    if layer.to_i == 0
+      _, width = args[1].split(".")
+      _, height = args[2].split(".")
+      puts "size instruction received #{args.join(',')}"
+      #resize_op!(width.to_i, height[0..-2].to_i)
+    end
   end
 
   def copy_instr(args)
     parsed_args = args.map { |i| i.split(".").last.to_i }
-    composite_op(parsed_args) 
+    composite_op!(parsed_args) 
   end
   
   def method_missing(sym, *args, &block)
-    puts sym
+    puts "Method missing #{sym.to_s}"
   end
 
   def respond_to?(sym, include_private=false)
